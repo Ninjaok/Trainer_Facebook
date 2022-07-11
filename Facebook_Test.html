@@ -1,0 +1,247 @@
+<html>
+    <head>
+        <link href="node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet" />
+        <script src="node_modules/jquery/dist/jquery.js"></script>
+        <script src="node_modules/bootstrap/dist/js/bootstrap.bundle.js"></script>
+
+        <script>
+            $(document).ready(function(){
+                let hoje = new Date();
+                let meses = new Array( 'JAN', 'FEV', 'MAR', 'ABR', 'MAI', 'JUN',
+                                       'JUL', 'AGO', 'SET', 'OUT', 'NOV', 'DEZ');
+                let selected = "";
+
+                for(i = 1; i < 32; i++){
+                    selected = "";
+                    if (i == hoje.getDate()){
+                        selected = " selected";
+                    }
+                    let cmd = "<option value='" + i + "'" + selected + ">" + i + "</option>";
+                    $("#diaNascimento").append(cmd);
+                }
+
+                // carrega mes
+                for(i = 1; i < 13; i++)
+                {
+                    selected = "";
+                    if (i == hoje.getMonth() +1){
+                        selected = " selected";
+                    }
+                    let cmd = "<option value='" + i + "'" + selected + ">" + meses[i-1] + "</option>";
+                    $("#mesNascimento").append(cmd);
+                }
+
+                // carrega ano
+                selected = " selected";
+                for(i = hoje.getFullYear() - 17; i > 1904; i--)
+                {
+                    let cmd = "<option value='" + i + "'" + selected + ">" + i + "</option>";
+                    $("#anoNascimento").append(cmd);
+                    selected = "";
+                }
+
+                $(function () {
+                  $('[data-toggle="tooltip"]').tooltip()
+                })
+
+                $("#frmData").tooltip('enable')
+
+                // carrega ano
+                // for(i = hoje.getFullYear() -17; i > 1905; i--)
+                // {
+
+                // }
+
+                // demais eventos
+                $("#feminino, #masculino").click(function(){
+                    $("#frmPersonalizar").css("display", "none");
+                });
+
+                $("#personalizar").click(function(){
+                    $("#frmPersonalizar").css("display", "");
+                });            
+                
+                $("#btnRegistrar").click(function(){
+                    let valido = true;
+
+                    if($("#nome").val() == ""){
+                        $("#nome").css("border-color", "red");
+                        valido = false;
+                    } else {
+                        $("#nome").css("border-color", "black");
+                    }
+
+                    // "mm dd yyyy"
+                    var dtTexto = $("#mesNascimento").val() + " " + $("#diaNascimento").val() + " " + $("#anoNascimento").val();
+                    var dataValidada = new Date(dtTexto);
+
+                    //console.log(dataValidada.getMonth() +1);
+                    //console.log(parseInt($("#mesNascimento").val()));
+
+                    if ((dataValidada.getMonth() +1) == parseInt($("#mesNascimento").val())){
+                        $("#diaNascimento").css("border-color", "black");
+                        $("#mesNascimento").css("border-color", "black");
+                        $("#anoNascimento").css("border-color", "black");
+                    } else {
+                        $("#diaNascimento").css("border-color", "red");
+                        $("#mesNascimento").css("border-color", "red");
+                        $("#anoNascimento").css("border-color", "red");
+
+                        valido = false;
+                    }
+                    
+
+                });
+            });
+        </script>
+
+        <style>
+            body{
+                background: #f0f2f5;
+                color: #949baa;
+                font-family: SFProText-Medium, Helvetica, Arial, sans-serif;
+            }
+
+            .main {
+                width: 450px;
+            }
+
+            .fb_logo {
+                height: 100px;
+            }
+
+            .formulario {
+                background: #fff;
+                text-align: center;
+                border-radius: 8px;
+            }
+
+            #cabecalho {
+                font-size: 25px;
+                line-height: 32px;
+                font-weight: 600;
+                color: #000;
+            }
+
+            #genero {
+                text-align: left;
+            }
+            
+            #genero > div > span {
+                margin-right: 0px;
+            }
+
+            #genero > div > span > input[type="radio"]  {
+                right: 0px;
+                margin: 0px;
+                position: relative;
+            }
+
+            .row > * {
+                margin-top: 10px;
+                padding-right: 0px;
+            }       
+            
+            .row > label {
+                margin-top: 5;
+                margin-bottom: -10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container main">
+            <div class="row">
+                <img src="facebook.svg" class="fb_logo" />
+            </div>
+            <div class="row formulario">                
+                <div class="row" style="border-bottom: solid 2px #f0f2f5; height: 80px;">
+                    <label id="cabecalho">
+                        Criar uma conta nova
+                    </label>
+                    <label>
+                        É rápido e fácil.
+                    </label>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" id="nome" name="nome" placeholder="Nome próprio" />
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" id="apelido" name="apelido" placeholder="Apelido" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" id="usuario" name="usuario" placeholder="Número de celular ou e-mail" />
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <input type="text" class="form-control" id="senha" name="senha" placeholder="Crie uma senha para sua conta" />
+                    </div>
+                </div>
+
+                <div class="row" id="frmData" data-toggle="tooltip" data-placement="left" title="Data inválida">
+                    <label style="text-align: left;"><small>Data de nascimento</small></label>
+                    <div class="col">
+                        <select name="diaNascimento" id="diaNascimento" class="form-control">
+                        </select>
+                    </div>
+                    <div class="col">
+                        <select name="mesNascimento" id="mesNascimento" class="form-control">
+                        </select>
+                    </div>
+                    <div class="col">
+                        <select name="anoNascimento" id="anoNascimento" class="form-control">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row" id="genero">
+                    <label style="text-align: left;"><small>G&ecirc;nero</small></label>
+                    <div class="col">
+                        <span class="form-control">
+                            <label for="feminino" style="text-align:left">Feminino</label>
+                            <input type="radio" name="genero" id="feminino">
+                        </span>                        
+                    </div>
+                    <div class="col">
+                        <span class="form-control">
+                            <label for="masculino">Masculino</label>
+                            <input type="radio" name="genero" id="masculino">
+                        </span>                        
+                    </div>
+                    <div class="col">
+                        <span class="form-control">
+                            <label for="personalizar">Personalizar</label>
+                            <input type="radio" name="genero" id="personalizar">
+                        </span>                        
+                    </div>
+                </div>
+
+                <div class="row" id="frmPersonalizar" style="display: none;">
+                    <div>
+                        <select name="pronome" id="pronome" class="form-control">
+                            <option>Selecione o seu pronome</option>
+                            <option>Ela</option>
+                            <option>Ele</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">&nbsp;</div>
+                    <div class="col-6">
+                        <button type="button" class="btn" style="background: #119f16; color: #fff; width: 100%;" id="btnRegistrar"> Registre-se</button>
+                    </div>                 
+                    <div class="col">&nbsp;</div>   
+                </div>
+                <div class="row">
+                    <div class="col">&nbsp;</div>
+                </div>
+            </div>            
+        </div>
+    </body>
+</html>
